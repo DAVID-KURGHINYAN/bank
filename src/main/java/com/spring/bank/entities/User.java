@@ -1,4 +1,4 @@
-package com.spring.bank.entity;
+package com.spring.bank.entities;
 
 
 import com.spring.bank.enums.Role;
@@ -44,6 +44,29 @@ public class User {
     @OneToMany(mappedBy = "user")
     private Set<Transaction> transactions;
 
+    public User() {
+
+    }
+
+    public User(String firstName, String lastName, int age, String username, String password, Role role) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.age = age;
+        this.username = username;
+        this.password = password;
+        this.role = role;
+    }
+
+    public User(int id, String firstName, String lastName, int age, String username, String password, Role role) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.age = age;
+        this.username = username;
+        this.password = password;
+        this.createdAt = createdAt;
+        this.role = role;
+    }
 
     public int getId() {
         return id;
@@ -124,4 +147,5 @@ public class User {
     public void setTransactions(Set<Transaction> transactions) {
         this.transactions = transactions;
     }
+
 }
