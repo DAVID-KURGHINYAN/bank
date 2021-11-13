@@ -9,7 +9,7 @@ public class Transaction {
     public Transaction() {
     }
 
-    public Transaction(int id, String transactionType, String transactionStatus, Integer transactionSum, User user) {
+    public Transaction(int id, String transactionType, String transactionStatus, Integer transactionSum) {
         this.id = id;
         this.transactionType = transactionType;
         this.transactionStatus = transactionStatus;

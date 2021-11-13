@@ -40,6 +40,7 @@ public class TransactionControllerTest {
     @InjectMocks
     TransactionController controller;
 
+
     private final TransactionService service = Mockito.mock(TransactionService.class);
     private final TransactionServiceImpl serviceImpl = Mockito.mock(TransactionServiceImpl.class);
     private final UserServiceImpl userService = Mockito.mock(UserServiceImpl.class);
@@ -53,7 +54,7 @@ public class TransactionControllerTest {
     @BeforeEach
     public void setup() {
         user = new User(10, "Test", "Testyan", 25, "testing", "123456", Role.USER);
-        transaction = new Transaction(1, "deposit", "pending", 500, user);
+        transaction = new Transaction(1, "deposit", "pending", 500);
         mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
 
@@ -65,16 +66,12 @@ public class TransactionControllerTest {
 
     @Test
     void makeTransactionPost() throws Exception {
-        Set<Transaction> set = new HashSet<>();
-        set.add(transaction);
-        user.setTransactions(set);
-        when(userService.getUserById(user.getId())).thenReturn(user);
-        when(service.createTransaction(user.getId(), transaction)).thenReturn(true);
+        when(service.createTransaction(any(),any())).thenReturn(true);
         mockMvc.perform(post("/transaction/make_transaction/10").
                         contentType(MediaType.APPLICATION_JSON).content(asJsonString(transaction))).
-                andExpect(status().isCreated());
-        verify(userService,times(1)).createUser(any());
-        Assertions.assertEquals(user.getUsername(),"Test");
+                andExpect(status().isOk());
+        verify(service,times(1)).createTransaction(any(),any());
+
     }
 
     @Test
