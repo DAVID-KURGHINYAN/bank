@@ -72,7 +72,7 @@ public class UserServiceImplTest {
 
     @Test
     public void checkLogin() {
-        when(service.getUserByUsername(any())).thenReturn(user1);
+        when(service.getUserByUsername(any())).thenReturn(java.util.Optional.ofNullable(user1));
         User result = service.checkLogin(user2);
         assertNotNull(result);
     }
@@ -87,7 +87,7 @@ public class UserServiceImplTest {
     @Test
     public void changeRoleOfUser() {
         when(userRepo.findByid(any())).thenReturn(userAdmin);
-        when(userRepo.findByUsername(any())).thenReturn(user2);
+        when(userRepo.findByUsername(any())).thenReturn(java.util.Optional.ofNullable(user2));
         when(userRepo.save(any())).thenReturn(null);
         User result = service.changeRoleOfUser(10, userToBeChangedRole);
         assertEquals("ADMIN", result.getRole().name());

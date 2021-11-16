@@ -8,8 +8,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,6 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -37,21 +40,17 @@ public class AuthenticationController {
     @PostMapping("/login")
     public ResponseEntity<?> authenticate(@RequestBody AuthRequest request) {
         try {
-            String username = request.getUsername();
-            BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-            String encodedPass= encoder.encode(request.getPassword());
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), encodedPass));
-            User user = userRepo.findByUsername(request.getUsername());
-            if (user == null) {
-                throw new UsernameNotFoundException("User doesn't exist");
-            } else {
-                String token = jwtTokenProvider.createToken(request.getUsername(), user.getRole().name());
-                Map<Object, Object> response = new HashMap<>();
-                response.put("username", request.getUsername());
-                response.put("token", token);
-                return ResponseEntity.ok(response);
-            }
-        } catch (Exception e) {
+            PasswordEncoder encoder = new BCryptPasswordEncoder();
+            String encoderPass = encoder.encode(request.getPassword());
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), encoderPass));
+            User user = userRepo.findByUsername(request.getUsername()).orElseThrow(()-> new UsernameNotFoundException("User doesn't exist"));
+            String token = jwtTokenProvider.createToken(request.getUsername(), user.getRole().name());
+            Map<Object, Object> response = new HashMap<>();
+            response.put("username", request.getUsername());
+            response.put("token", token);
+            return ResponseEntity.ok(response);
+
+        } catch (AuthenticationException e) {
             return new ResponseEntity<>("Invalid username or password.", HttpStatus.FORBIDDEN);
 
         }

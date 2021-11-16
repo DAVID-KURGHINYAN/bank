@@ -51,7 +51,7 @@ public class BankAccountServiceImplTest {
     @Test
     public void createBankAccountTest() {
         when(userRepo.findByid(any())).thenReturn(user1);
-        when(userRepo.findByUsername(any())).thenReturn(user);
+        when(userRepo.findByUsername(any())).thenReturn(java.util.Optional.ofNullable(user));
         when(bankAccountRepo.save(any())).thenReturn(bankAcc);
         when(userRepo.save(any())).thenReturn(null);
         BankAccount acc = service.createBankAccount(1, user);

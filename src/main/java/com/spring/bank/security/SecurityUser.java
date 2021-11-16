@@ -1,6 +1,7 @@
 package com.spring.bank.security;
 
 import com.spring.bank.entities.User;
+import com.spring.bank.enums.Status;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -61,10 +62,10 @@ public class SecurityUser implements UserDetails {
         return new org.springframework.security.core.userdetails.User(
                 user.getUsername(),
                 user.getPassword(),
-//                user.isStatus(),
-//                user.isStatus(),
-//                user.isStatus(),
-//                user.isStatus(),
+                user.getStatus().equals(Status.ACTIVE),
+                user.getStatus().equals(Status.ACTIVE),
+                user.getStatus().equals(Status.ACTIVE),
+                user.getStatus().equals(Status.ACTIVE),
                 user.getRole().getAuthorities()
         );
     }

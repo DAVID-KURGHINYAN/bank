@@ -2,6 +2,7 @@ package com.spring.bank.entities;
 
 
 import com.spring.bank.enums.Role;
+import com.spring.bank.enums.Status;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -10,6 +11,7 @@ import java.util.Set;
 @Entity
 @Table(name="user", schema = "public")
 public class User {
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,11 +36,8 @@ public class User {
     private LocalDate createdAt;
 
     @Column(name="role")
-    @Enumerated(EnumType.STRING)
+    @Enumerated(value = EnumType.STRING)
     private Role role;
-
-//    @Column(name = "status")
-//    private boolean status;
 
     @OneToOne()
     @JoinColumn(name = "bank_account_id", referencedColumnName = "id")
@@ -46,6 +45,10 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     private Set<Transaction> transactions;
+
+    @Enumerated(value = EnumType.STRING)
+    @Column(name = "status")
+    private Status status;
 
     public User() {
 
@@ -67,7 +70,6 @@ public class User {
         this.age = age;
         this.username = username;
         this.password = password;
-        this.createdAt = createdAt;
         this.role = role;
     }
 
@@ -151,11 +153,11 @@ public class User {
         this.transactions = transactions;
     }
 
-//    public boolean isStatus() {
-//        return status;
-//    }
-//
-//    public void setStatus(boolean status) {
-//        this.status = status;
-//    }
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
 }
