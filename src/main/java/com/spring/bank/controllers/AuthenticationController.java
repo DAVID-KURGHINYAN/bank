@@ -10,8 +10,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,11 +20,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/auth")
 public class AuthenticationController {
+
     private final AuthenticationManager authenticationManager;
     private final UserRepo userRepo;
     private final JwtTokenProvider jwtTokenProvider;
@@ -40,9 +38,16 @@ public class AuthenticationController {
     @PostMapping("/login")
     public ResponseEntity<?> authenticate(@RequestBody AuthRequest request) {
         try {
-            PasswordEncoder encoder = new BCryptPasswordEncoder();
+
+            org.springframework.security.crypto.password.PasswordEncoder encoder
+                    = new org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder();
             String encoderPass = encoder.encode(request.getPassword());
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), encoderPass));
+
+            System.out.println(encoder.matches("123456", encoderPass));
+
+            System.out.println(request.getPassword());
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), "123456"));
+
             User user = userRepo.findByUsername(request.getUsername()).orElseThrow(()-> new UsernameNotFoundException("User doesn't exist"));
             String token = jwtTokenProvider.createToken(request.getUsername(), user.getRole().name());
             Map<Object, Object> response = new HashMap<>();
@@ -61,4 +66,5 @@ public class AuthenticationController {
         SecurityContextLogoutHandler securityContextLogoutHandler = new SecurityContextLogoutHandler();
         securityContextLogoutHandler.logout(request, response, null);
     }
+
 }

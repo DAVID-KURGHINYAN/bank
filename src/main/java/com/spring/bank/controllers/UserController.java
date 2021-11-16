@@ -60,7 +60,7 @@ public class UserController {
       return new ResponseEntity<>(user, HttpStatus.NOT_ACCEPTABLE);
     } else if (user.getPassword() == null || user.getPassword().trim().equals("")) {
       return new ResponseEntity<>(user, HttpStatus.NOT_ACCEPTABLE);
-    } else if (userService.getUserByUsername(user.getUsername()) != null) {
+    } else if (userService.getUserByUsername(user.getUsername()).isPresent()) {
       return new ResponseEntity<>(user, HttpStatus.NOT_ACCEPTABLE);
     } else {
       User registeredUser = userService.createUser(user);

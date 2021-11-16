@@ -19,6 +19,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final JwtConfigurer jwtConfigurer;
 
+
     public SecurityConfig(JwtConfigurer jwtConfigurer) {
         this.jwtConfigurer = jwtConfigurer;
     }
@@ -35,8 +36,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest()
                 .authenticated()
                 .and()
-                .apply(jwtConfigurer);
+                .formLogin();
+//                .apply(jwtConfigurer);
     }
+
 
     @Bean
     @Override

@@ -34,8 +34,8 @@ public class JwtTokenProvider {
     }
 
     @PostConstruct
-    protected void init(){
-        secretKey =HelperUtil.base64(secretKey);
+    protected void init() {
+        secretKey = HelperUtil.base64(secretKey);
     }
 
     public String createToken(String username, String role) {
@@ -56,21 +56,21 @@ public class JwtTokenProvider {
         try {
             Jws<Claims> claimsJws = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
             return !claimsJws.getBody().getExpiration().before(new Date());
-        }catch (JwtException | IllegalArgumentException e){
+        } catch (JwtException | IllegalArgumentException e) {
             throw new JwtAuthenticationException("JWT token is expired or invalid ", HttpStatus.UNAUTHORIZED);
         }
     }
 
-    public Authentication getAuthentication(String token){
+    public Authentication getAuthentication(String token) {
         UserDetails userDetails = this.userDetailsService.loadUserByUsername(getUsername(token));
-        return new UsernamePasswordAuthenticationToken(userDetails,"", userDetails.getAuthorities());
+        return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }
 
-    public String getUsername(String token){
+    public String getUsername(String token) {
         return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject();
     }
 
-    public String resolveToken(HttpServletRequest request){
+    public String resolveToken(HttpServletRequest request) {
         return request.getHeader(authorizationHeader);
     }
 }
