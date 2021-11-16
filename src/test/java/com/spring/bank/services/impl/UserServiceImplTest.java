@@ -1,6 +1,5 @@
 package com.spring.bank.services.impl;
 
-import com.spring.bank.entities.BankAccount;
 import com.spring.bank.entities.Transaction;
 import com.spring.bank.entities.User;
 import com.spring.bank.enums.Role;
@@ -36,7 +35,6 @@ public class UserServiceImplTest {
     private User user2 = null;
     private User userAdmin = null;
     private User userToBeChangedRole = null;
-    private BankAccount bankAcc;
     private String encodedPass = null;
 
     @BeforeEach
@@ -48,12 +46,11 @@ public class UserServiceImplTest {
         user2 = new User(1, "Test", "Testyan", 20, "Testing", "123456", Role.USER);
         userToBeChangedRole = new User(1, "Test", "Testyan", 20, "Testing", "123456", Role.ADMIN);
         Set<Transaction> set = new HashSet<>();
-        Transaction tr1 = new Transaction(1, "deposit", "pending", 300);
-        Transaction tr2 = new Transaction(2, "withdraw", "approved", 300);
+        Transaction tr1 = new Transaction(1, "deposit", "pending", 300, user1);
+        Transaction tr2 = new Transaction(2, "withdraw", "approved", 300, user2);
         set.add(tr1);
         set.add(tr2);
         user1.setTransactions(set);
-        bankAcc = new BankAccount(0);
     }
 
     @AfterEach
@@ -62,7 +59,6 @@ public class UserServiceImplTest {
         user1 = null;
         user2 = null;
         encodedPass = null;
-        bankAcc = null;
         userAdmin = null;
         userToBeChangedRole = null;
     }

@@ -1,6 +1,5 @@
 package com.spring.bank.controllers;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.spring.bank.entities.Transaction;
 import com.spring.bank.entities.User;
 import com.spring.bank.enums.Role;
@@ -20,6 +19,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import java.util.HashSet;
 import java.util.Set;
 
+import static com.spring.bank.HelperUtil.asJsonString;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -27,14 +27,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @ExtendWith(MockitoExtension.class)
 class UserControllerTest {
-
-    public static String asJsonString(final Object obj) {
-        try {
-            return new ObjectMapper().writeValueAsString(obj);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
 
     @InjectMocks
     UserController controller;
@@ -55,8 +47,8 @@ class UserControllerTest {
     public void setup() {
         user = new User(1, "Test", "Testyan", 20, "Testing", "123456", Role.USER);
         set = new HashSet<>();
-        tr1 = new Transaction(1, "deposit", "pending", 300);
-        tr2 = new Transaction(2, "withdraw", "approved", 300);
+        tr1 = new Transaction(1, "deposit", "pending", 300, user);
+        tr2 = new Transaction(2, "withdraw", "approved", 300, user);
         set.add(tr1);
         set.add(tr2);
         mockMvc = MockMvcBuilders.standaloneSetup(controller).build();

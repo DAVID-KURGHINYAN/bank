@@ -10,13 +10,13 @@ import org.springframework.web.bind.annotation.*;
 
 
 @RestController
-@RequestMapping("/bank_account")
+@RequestMapping("/api/bank_account")
 public class BankAccountController {
 
   @Autowired
   BankAccountService bankAccountService;
 
-  @PostMapping("/create_bank_account/{id}")
+  @PostMapping("/create/{id}")
   public ResponseEntity<BankAccount> createBankAccount(@PathVariable Integer id, @RequestBody User user) {
      BankAccount bankAccount = bankAccountService.createBankAccount(id, user);
      if (bankAccount != null){

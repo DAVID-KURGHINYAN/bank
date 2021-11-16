@@ -37,6 +37,9 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Role role;
 
+//    @Column(name = "status")
+//    private boolean status;
+
     @OneToOne()
     @JoinColumn(name = "bank_account_id", referencedColumnName = "id")
     private BankAccount bankAccount;
@@ -148,4 +151,11 @@ public class User {
         this.transactions = transactions;
     }
 
+//    public boolean isStatus() {
+//        return status;
+//    }
+//
+//    public void setStatus(boolean status) {
+//        this.status = status;
+//    }
 }

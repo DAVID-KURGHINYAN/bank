@@ -54,7 +54,7 @@ public class TransactionControllerTest {
     @BeforeEach
     public void setup() {
         user = new User(10, "Test", "Testyan", 25, "testing", "123456", Role.USER);
-        transaction = new Transaction(1, "deposit", "pending", 500);
+        transaction = new Transaction(1, "deposit", "pending", 500, user);
         mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
 

@@ -1,5 +1,6 @@
 package com.spring.bank.services.impl;
 
+import com.spring.bank.HelperUtil;
 import com.spring.bank.entities.Transaction;
 import com.spring.bank.entities.User;
 import com.spring.bank.enums.Role;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.Base64;
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -20,7 +22,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User createUser(User user) {
-        String encodedString = Base64.getEncoder().encodeToString(user.getPassword().getBytes());
+        String encodedString = HelperUtil.base64(user.getPassword());
         user.setPassword(encodedString);
         LocalDate date = LocalDate.now();
         user.setCreatedAt(date);
@@ -84,5 +86,10 @@ public class UserServiceImpl implements UserService {
         else{
             return null;
         }
+    }
+
+    @Override
+    public List<User> getAllUsers() {
+        return userRepo.findAll();
     }
 }
