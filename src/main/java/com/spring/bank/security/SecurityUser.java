@@ -6,15 +6,16 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 
-public class SecurityUser implements UserDetails {
+public class SecurityUser implements Serializable {
 
-    private final String username;
-    private final String password;
-    private final List<SimpleGrantedAuthority> authorities;
-    private final boolean isActive;
+    private String username;
+    private String password;
+    private List<SimpleGrantedAuthority> authorities;
+    private boolean isActive;
 
     public SecurityUser(String username, String password, List<SimpleGrantedAuthority> authorities, boolean isActive) {
         this.username = username;
@@ -23,50 +24,35 @@ public class SecurityUser implements UserDetails {
         this.isActive = isActive;
     }
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return authorities;
-    }
-
-    @Override
-    public String getPassword() {
-        return password;
-    }
-
-    @Override
     public String getUsername() {
         return username;
     }
 
-    @Override
-    public boolean isAccountNonExpired() {
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public List<SimpleGrantedAuthority> getAuthorities() {
+        return authorities;
+    }
+
+    public void setAuthorities(List<SimpleGrantedAuthority> authorities) {
+        this.authorities = authorities;
+    }
+
+    public boolean isActive() {
         return isActive;
     }
 
-    @Override
-    public boolean isAccountNonLocked() {
-        return isActive;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return isActive;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return isActive;
-    }
-
-    public static UserDetails fromUser(User user) {
-        return new org.springframework.security.core.userdetails.User(
-                user.getUsername(),
-                user.getPassword(),
-                user.getStatus().equals(Status.ACTIVE),
-                user.getStatus().equals(Status.ACTIVE),
-                user.getStatus().equals(Status.ACTIVE),
-                user.getStatus().equals(Status.ACTIVE),
-                user.getRole().getAuthorities()
-        );
+    public void setActive(boolean active) {
+        isActive = active;
     }
 }

@@ -43,7 +43,7 @@ public class AuthenticationController {
                     = new org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder();
             String encoderPass = encoder.encode(request.getPassword());
 
-            System.out.println(encoder.matches("123456", encoderPass));
+            System.out.println(encoder.matches("123456", "$2a$10$0NOB6YQt/GLMpXSvoFeaxO3tJsSKzECBSxMKfA5Klddtm8Hy7bYGG"));
 
             System.out.println(request.getPassword());
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), "123456"));
