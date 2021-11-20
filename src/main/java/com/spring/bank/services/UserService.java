@@ -3,6 +3,7 @@ package com.spring.bank.services;
 
 import com.spring.bank.entities.Transaction;
 import com.spring.bank.entities.User;
+import org.springframework.security.core.Authentication;
 
 import java.util.List;
 import java.util.Optional;
@@ -14,10 +15,8 @@ public interface UserService {
     Optional<User> getUserByUsername(String username);
     User getUserById(Integer userId);
     User checkLogin(User user);
-
     List<User> getAllUsers();
-
     Set<Transaction> getUserHistory(Integer userId);
     User changeRoleOfUser(Integer loggedId, User toBeChangedUser);
-
+    User loggedInUser(Authentication auth);
 }

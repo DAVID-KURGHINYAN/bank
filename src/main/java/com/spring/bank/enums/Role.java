@@ -2,13 +2,18 @@ package com.spring.bank.enums;
 
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
-import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 public enum Role {
-    ADMIN(Set.of(Permission.USERS_READ)),
-    USER(Set.of(Permission.USERS_WRITE, Permission.USERS_READ));
+    ADMIN(Set.of(Permission.USERS_READ, Permission.USERS_WRITE)),
+    USER(Set.of(Permission.USERS_READ));
+
+    /**
+     * ADMIN(new HashSet<>(Arrays.asList(Permission.USERS_READ, Permission.USERS_WRITE))),
+     *
+     * USER(new HashSet<>(Arrays.asList(Permission.USERS_READ)));
+     * */
 
     private final Set<Permission> permissions;
 

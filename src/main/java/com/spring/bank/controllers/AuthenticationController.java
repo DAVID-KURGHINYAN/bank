@@ -10,6 +10,8 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -38,17 +40,10 @@ public class AuthenticationController {
     @PostMapping("/login")
     public ResponseEntity<?> authenticate(@RequestBody AuthRequest request) {
         try {
-
-            org.springframework.security.crypto.password.PasswordEncoder encoder
-                    = new org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder();
-            String encoderPass = encoder.encode(request.getPassword());
-
-            System.out.println(encoder.matches("123456", "$2a$10$0NOB6YQt/GLMpXSvoFeaxO3tJsSKzECBSxMKfA5Klddtm8Hy7bYGG"));
-
-            System.out.println(request.getPassword());
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), "123456"));
-
-            User user = userRepo.findByUsername(request.getUsername()).orElseThrow(()-> new UsernameNotFoundException("User doesn't exist"));
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(request.getUsername(), "123456"));
+            User user = userRepo.findByUsername(request.getUsername()).orElseThrow(() ->
+                    new UsernameNotFoundException("User doesn't exist"));
             String token = jwtTokenProvider.createToken(request.getUsername(), user.getRole().name());
             Map<Object, Object> response = new HashMap<>();
             response.put("username", request.getUsername());
